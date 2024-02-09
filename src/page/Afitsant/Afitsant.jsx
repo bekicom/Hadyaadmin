@@ -1,7 +1,7 @@
 import axios from "axios";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./css.css";
-import { useReactToPrint } from "react-to-print";
+
 
 export default function Afitsant() {
   const [inventory, setInventory] = useState([]);
@@ -80,11 +80,7 @@ export default function Afitsant() {
     }
   };
 
-  const printref = useRef();
 
-  const handlePrint = useReactToPrint({
-    content: () => printref.current,
-  });
 
   if (loading) {
     return <p>Loading...</p>;
@@ -99,7 +95,6 @@ export default function Afitsant() {
             key={item.id}
             className={`card ${item.id === isLoading ? "loading" : ""} `}
             style={{ width: "18rem" }}
-            ref={printref}
           >
             <h5 className="card-title"> ISMI:{item.fullname}</h5>
             <p className="card-text">Xisobi: {item.balance}</p>
@@ -132,7 +127,6 @@ export default function Afitsant() {
                 Delete
               </button>
 
-              <button  id="print" onClick={handlePrint}>Print</button>
             </div>
           </div>
         ))}

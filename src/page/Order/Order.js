@@ -3,7 +3,10 @@ import "./css.css";
 import axios from "axios";
 import { useOutsideClick } from "../../utils/hook";
 import io from "socket.io-client";
+import { useReactToPrint } from "react-to-print";
+
 const socket = io.connect("https://api.hadyacrm.uz");
+//printer
 
 export default function Order() {
   const wrapperRef = useRef();
@@ -79,6 +82,13 @@ export default function Order() {
     });
   }, []);
 
+  //print
+  const printref = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => printref.current,
+  });
+
   return (
     <div>
       {loading && (
@@ -91,7 +101,7 @@ export default function Order() {
           <div className="modal-body" ref={wrapperRef}>
             {orderById?.map((item) => {
               return (
-                <div className="modalorder__item">
+                <div className="modalorder__item" ref={printref}>
                   <div className="modalorder__item__img">
                     <img src={item.image} alt="" />
                   </div>
@@ -108,6 +118,10 @@ export default function Order() {
                     <p>{item.product_type}</p>
                     <p>{item.product_unit}</p>
                   </div>
+
+                  <button id="print" onClick={handlePrint}>
+                    Print
+                  </button>
                 </div>
               );
             })}
