@@ -1,16 +1,15 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./css.css";
+import { useReactToPrint } from "react-to-print";
 
 export default function Afitsant() {
   const [inventory, setInventory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isLoading, setIsLoading] = useState(null);
 
-  // toast message
-
   const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIwMmFlOSIsImZ1bGxuYW1lIjoiQmVrem9kIiwicGhvbmUiOjk5ODkzOTA3NTM1MCwicGFzc3dvcmQiOiI4YzY5NzZlNWI1NDEwNDE1YmRlOTA4YmQ0ZGVlMTVkZmIxNjdhOWM4NzNmYzRiYjhhODFmNmYyYWI0NDhhOTE4IiwiYmFsYW5jZSI6MCwiYWN0aXZlIjowLCJyb2xlIjoiYWRtaW4iLCJjcmVhdGVkX2F0IjoiMjAyNC0wMi0wMVQxNTo0MTozMC4wMDBaIiwidXBkYXRlZF9hdCI6bnVsbCwiaWF0IjoxNzA3MTYyMjgzLCJleHAiOjE3MDk3NTQyODN9.C23tcebnuYTWKjBl6Rylj_rWZPS3_I4eScnJHl-BzZc"; // Tokeningizni bu yerga joylang
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIwMmFlOSIsImZ1bGxuYW1lIjoiQmVrem9kIiwicGhvbmUiOjk5ODkzOTA3NTM1MCwicGFzc3dvcmQiOiI4YzY5NzZlNWI1NDEwNDE1YmRlOTA4YmQ0ZGVlMTVkZmIxNjdhOWM4NzNmYzRiYjhhODFmNmYyYWI0NDhhOTE4IiwiYmFsYW5jZSI6MCwiYWN0aXZlIjowLCJyb2xlIjoiYWRtaW4iLCJjcmVhdGVkX2F0IjoiMjAyNC0wMi0wMVQxNTo0MTozMC4wMDBaIiwidXBkYXRlZF9hdCI6bnVsbCwiaWF0IjoxNzA3MTYyMjgzLCJleHAiOjE3MDk3NTQyODN9.C23tcebnuYTWKjBl6Rylj_rWZPS3_I4eScnJHl-BzZc";
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,6 +80,12 @@ export default function Afitsant() {
     }
   };
 
+  const printref = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => printref.current,
+  });
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -94,6 +99,7 @@ export default function Afitsant() {
             key={item.id}
             className={`card ${item.id === isLoading ? "loading" : ""} `}
             style={{ width: "18rem" }}
+            ref={printref}
           >
             <h5 className="card-title"> ISMI:{item.fullname}</h5>
             <p className="card-text">Xisobi: {item.balance}</p>
@@ -125,6 +131,8 @@ export default function Afitsant() {
               >
                 Delete
               </button>
+
+              <button  id="print" onClick={handlePrint}>Print</button>
             </div>
           </div>
         ))}
